@@ -12,15 +12,6 @@ import math
 directory = './sample'  # ファイル名を取得したいディレクトリのパス
 file_names = os.listdir(directory)
 splited_pdf_name_int = 0
-# if len(file_names) > 1:
-#     file_names.sort()
-#     print(file_names)
-#     splited_file_names = file_names[-1].split("_")
-#     splited_pdf_names = splited_file_names[1].split(".")
-#     splited_pdf_name = splited_pdf_names[0]
-#     splited_pdf_name_int = int(splited_pdf_name) + 1
-#     print(splited_pdf_name_int)
-
 csv_dir = os.getcwd() + "/sample_csv"
 csv_file_name = 'yami.csv'
 file_path = os.path.join(csv_dir, csv_file_name)
@@ -88,13 +79,3 @@ for p in range(pages):
             pdf.drawImage(total_card_path, dx, dy, dWidth, dHeight)
         x += 1
     pdf.save()  
-
-# i = 0
-# j = 0
-# for i in range(3):
-#     dx = 0*mm + 88*mm * 4
-#     dy = 0*mm + 88*mm * i
-#     dWidth = 63*mm
-#     dHeight = 88*mm
-#     save_path = "./imagedata/アストラル・リーフ.jpg"
-#     p.drawImage(save_path, dx, dy, dWidth, dHeight)
