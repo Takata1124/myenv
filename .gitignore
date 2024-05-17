@@ -1,0 +1,6 @@
+bin/
+imagedata/
+lib/
+*.jpg
+*.pdf
+test.csv
