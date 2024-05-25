@@ -29,17 +29,15 @@ class PokemonCard:
         await self.saveImage()
         await self.savePdf()
 
-    # 取得済みの画像ファイルを削除
+    # 画像ファイルを削除
     async def deleteFiles(self):
-        dire = os.getcwd() + "/imagedata/*"
-        files = glob.glob(dire)
-        for file in files:
-            os.remove(file)
-        dire = os.getcwd() + "/save/*"
-        files = glob.glob(dire)
-        for file in files:
-            os.remove(file)
-        dire = os.getcwd() + "/sample/pokemon/*"
+        self.deleteFilesWithDirectory("/imagedata/*")
+        self.deleteFilesWithDirectory("/save/*")
+        self.deleteFilesWithDirectory("/sample/pokemon/*")
+    
+    # 画像ファイルを削除
+    def deleteFilesWithDirectory(self, file_name):
+        dire = os.getcwd() + file_name
         files = glob.glob(dire)
         for file in files:
             os.remove(file)
