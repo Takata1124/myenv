@@ -1,7 +1,9 @@
 bin/
 imagedata/
+include/
 lib/
 *.jpg
 *.pdf
 *.png
 test.csv
+pyvenv.cfg
