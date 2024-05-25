@@ -87,11 +87,9 @@ class PokemonCard:
                     image = Image.open(image_path)
                     save_path = './save/' + card_title + '.jpg'
                     os.makedirs(os.path.dirname(save_path), exist_ok=True)
-                    if self.card_name.find('BREAK') > 0:
-                        image.save(save_path)
-                    else:
-                        rotated_image = image.rotate(90, expand=True)
-                        rotated_image.save(save_path)
+                    if self.card_name.find('BREAK') < 0:
+                        image = image.rotate(90, expand=True)
+                    image.save(save_path)
 
     # PDFを保存
     async def savePdf(self):
