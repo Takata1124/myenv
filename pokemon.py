@@ -9,22 +9,39 @@ from reportlab.lib.units import mm
 from PIL import Image
 import math
 import asyncio
+import glob
 
-class SimpleData:
+class PokemonCard:
 
     file_path = ""
     csv_file_name = ""
     splited_pdf_name_int = 0
     card_title_list = []
+    card_name = ""
 
     def __init__(self):
         loop = asyncio.get_event_loop()
         loop.run_until_complete(self.transaction())
 
     async def transaction(self):
+        await self.deleteFiles()
         await self.readFile()
         await self.make()
         await self.savePdf()
+
+    async def deleteFiles(self):
+        dire = os.getcwd() + "/imagedata/*"
+        files = glob.glob(dire)
+        for file in files:
+            os.remove(file)
+        dire = os.getcwd() + "/save/*"
+        files = glob.glob(dire)
+        for file in files:
+            os.remove(file)
+        dire = os.getcwd() + "/sample/pokemon/*"
+        files = glob.glob(dire)
+        for file in files:
+            os.remove(file)
 
     async def readFile(self):
         csv_dir = os.getcwd() + "/sample_csv"
@@ -36,15 +53,18 @@ class SimpleData:
 
     async def make(self):
         for card_title in self.card_title_list:
+            self.isBreake = False
             headers = {
             "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0",
             }
             target_url = "https://www.pokemon-card.com/card-search/details.php/card/" + card_title + "/regu/all"
             r = requests.get(target_url,headers=headers)
-            print(r)
             soup = BeautifulSoup(r.text,"html.parser")
             elems = soup.select("img")
-            
+            h1 = soup.find_all('h1')
+            for value in h1:
+                text = value.text.strip()
+                self.card_name = text
             for elem in elems:
                 baseUrl = "https://www.pokemon-card.com/"
                 src = elem.get("src")
@@ -58,14 +78,16 @@ class SimpleData:
                     image_file.write(r.content)
                     image_file.close()
                     image = Image.open(image_path)
-                    rotated_image = image.rotate(90, expand=True)
                     save_path = './save/' + card_title + '.jpg'
-                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-                    rotated_image.save(save_path)
+                    if self.card_name.find('BREAK') > 0:
+                        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                        image.save(save_path)
+                    else:
+                        rotated_image = image.rotate(90, expand=True)
+                        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                        rotated_image.save(save_path)
 
     async def savePdf(self):
-        print(self.card_title_list)
-
         pages = math.ceil(len(self.card_title_list) / 4)
 
         i = 0
@@ -96,4 +118,4 @@ class SimpleData:
                 x += 1
             pdf.save() 
 
-simpleData = SimpleData()
+pokemonCard = PokemonCard()
