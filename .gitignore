@@ -3,4 +3,5 @@ imagedata/
 lib/
 *.jpg
 *.pdf
+*.png
 test.csv
