@@ -8,6 +8,8 @@ from reportlab.lib.pagesizes import landscape, A3
 from reportlab.lib.units import mm
 from PIL import Image
 import math
+import glob
+import PyPDF2
 
 class SimpleData:
 
@@ -18,7 +20,22 @@ class SimpleData:
     def __init__(self):
         self.readFile()
         self.make()
+        self.confirmPdfBroken()
 
+    def confirmPdfBroken(self):
+        dire = os.getcwd() + "/sample/yami/*"
+        files = glob.glob(dire)
+        for file in files:
+            os.remove(file)
+            try:
+                #読み込み
+                pdf_reader = PyPDF2.PdfFileReader(file)
+                #ページ数の表示
+                num = pdf_reader.getNumPages()
+                print(num)
+                print('Success in opening {}'.format(file))
+            except:
+                print('err in opening {}'.format(file))
 
     def readFile(self):
         csv_dir = os.getcwd() + "/sample_csv"

@@ -8,6 +8,7 @@ from PIL import Image
 import math
 import asyncio
 import glob
+import PyPDF2
 
 # ポケモンカード
 class PokemonCard:
@@ -28,6 +29,7 @@ class PokemonCard:
         await self.readFile()
         await self.saveImage()
         await self.savePdf()
+        await self.confirmPdfBroken()
 
     # 画像ファイルを削除
     async def deleteFiles(self):
@@ -41,6 +43,18 @@ class PokemonCard:
         files = glob.glob(dire)
         for file in files:
             os.remove(file)
+    
+    # PDF破損確認
+    async def confirmPdfBroken(self):
+        dire = os.getcwd() + "/sample/pokemon/*"
+        files = glob.glob(dire)
+        for file in files:
+            try:
+                pdf_reader = PyPDF2.PdfReader(file)
+                print(pdf_reader)
+                print('Success in opening {}'.format(file))
+            except Exception as exc:
+                print(f"ERROR: {exc} なにかおかしい")
 
     # ポケモンのCSVファイルを読み込み
     async def readFile(self):
@@ -100,7 +114,7 @@ class PokemonCard:
         splited_csv_file_name = self.csv_file_name.split(".")
         for p in range(pages):
             p = p + self.splited_pdf_name_int
-            pdf_path = "./sample/" + splited_csv_file_name[0] + "/" + splited_csv_file_name[0] + "_" + self.decki_name + "_" + str(p) + ".pdf"
+            pdf_path = "./sample/" + splited_csv_file_name[0] + "/" + splited_csv_file_name[0] + "_"  + str(p) + ".pdf"
             os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
             pdf = canvas.Canvas(pdf_path, pagesize=landscape(A3))
             for j in range(4):
