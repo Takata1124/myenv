@@ -95,6 +95,7 @@ class PokemonCard:
                     baseUrl = baseUrl +  src
                     r = requests.get(baseUrl)
                     image_path = './imagedata/' + card_title + '.jpg'
+                    os.makedirs(os.path.dirname(image_path), exist_ok=True)
                     image_file = open(image_path, 'wb')
                     image_file.write(r.content)
                     image_file.close()
@@ -107,6 +108,7 @@ class PokemonCard:
 
     # PDFを保存
     async def savePdf(self):
+        print("savePdf")
         i = 0
         j = 0
         x = 0
