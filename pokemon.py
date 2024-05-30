@@ -9,6 +9,7 @@ import math
 import asyncio
 import glob
 import PyPDF2
+import argparse
 
 # ポケモンカード
 class PokemonCard:
@@ -19,7 +20,8 @@ class PokemonCard:
     card_name = ""
     decki_name = ""
 
-    def __init__(self):
+    def __init__(self, csv_path):
+        self.file_path = csv_path
         loop = asyncio.get_event_loop()
         loop.run_until_complete(self.transaction())
 
@@ -58,9 +60,6 @@ class PokemonCard:
 
     # ポケモンのCSVファイルを読み込み
     async def readFile(self):
-        csv_dir = os.getcwd() + "/sample_csv"
-        self.csv_file_name = 'pokemon.csv'
-        self.file_path = os.path.join(csv_dir, self.csv_file_name)
         with open(self.file_path, encoding = 'utf-8') as f:
             lines = f.readlines()
         self.card_title_list = [ line.strip() for line in lines]
@@ -113,7 +112,7 @@ class PokemonCard:
         j = 0
         x = 0
         pages = math.ceil(len(self.card_title_list) / 4)
-        splited_csv_file_name = self.csv_file_name.split(".")
+        splited_csv_file_name = os.path.basename(self.file_path).split(".")
         for p in range(pages):
             p = p + self.splited_pdf_name_int
             pdf_path = "./sample/" + splited_csv_file_name[0] + "/" + splited_csv_file_name[0] + "_"  + str(p) + ".pdf"
@@ -135,4 +134,8 @@ class PokemonCard:
                 x += 1
             pdf.save() 
 
-pokemonCard = PokemonCard()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Process some integers.")
+    parser.add_argument('-sourcePath', type=str, required=True, help='Path to the source CSV file')
+    args = parser.parse_args()
+    pokemonCard = PokemonCard(args.sourcePath)
