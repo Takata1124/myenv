@@ -78,3 +78,7 @@ https://www.pokemon-card.com/card-search/details.php/card/45801/regu/XY
 #かがやくリザードン
 45803
 ```
+
+
+## 出力されたPDFを印刷するまで
+PDFで出力された画像はA3のサイズで印刷すると、実際のカードと同等のサイズになるように調整されています。
