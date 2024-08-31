@@ -5,5 +5,5 @@ lib/
 *.jpg
 *.pdf
 *.png
-test.csv
+*.csv
 pyvenv.cfg

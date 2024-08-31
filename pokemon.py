@@ -8,8 +8,9 @@ from PIL import Image
 import math
 import asyncio
 import glob
-import PyPDF2
+# import PyPDF2
 import argparse
+import pypdf
 
 # ポケモンカード
 class PokemonCard:
@@ -19,6 +20,7 @@ class PokemonCard:
     card_title_list = []
     card_name = ""
     decki_name = ""
+    pdf_paths = []
 
     def __init__(self, csv_path):
         self.file_path = csv_path
@@ -116,6 +118,7 @@ class PokemonCard:
         for p in range(pages):
             p = p + self.splited_pdf_name_int
             pdf_path = "./sample/" + splited_csv_file_name[0] + "/" + splited_csv_file_name[0] + "_"  + str(p) + ".pdf"
+            self.pdf_paths.append(pdf_path)
             os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
             pdf = canvas.Canvas(pdf_path, pagesize=landscape(A3))
             for j in range(4):
@@ -132,7 +135,11 @@ class PokemonCard:
                     total_card_path = prefix_card_path + select_card_title + suffix_card_path
                     pdf.drawImage(total_card_path, dx, dy, dWidth, dHeight)
                 x += 1
-            pdf.save() 
+            pdf.save()
+        writer = pypdf.PdfWriter()
+        for pdf in self.pdf_paths:
+            writer.append(pdf)
+        writer.write("./sample/" + splited_csv_file_name[0] + "/" + splited_csv_file_name[0] + "_" + "join.pdf")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process some integers.")
